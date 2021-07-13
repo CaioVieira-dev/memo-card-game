@@ -4,7 +4,7 @@ import { Difficulty } from '../../components/Difficulty'
 import { Board } from '../../components/Board'
 
 import styled from 'styled-components'
-import { useEffect, useState } from 'react';
+import { useGame } from '../../hooks/useGame'
 
 const GameBg = styled.div`
     min-height: 100vh;
@@ -27,29 +27,19 @@ gap:16px;
 `
 
 export function Game() {
-    const [gameState, setGameState] = useState('menuScreen');
-    const [gameDifficulty, setGameDifficulty] = useState('easy');
+    const { changeGameState, gameState } = useGame()
 
     function play() {
-        setGameState('playing')
+        changeGameState('playing')
     }
 
-
-    useEffect(() => {
-        console.log(gameDifficulty)
-
-    }, [gameDifficulty])
-    function changeGameDifficulty(difficulty: string) {
-        setGameDifficulty(difficulty)
-    }
     return (
         <GameBg>
             <Center>
                 <img src={logo} alt="logo" />
                 {gameState === 'menuScreen' &&
                     <>
-                        <Difficulty
-                            changeGameDifficulty={changeGameDifficulty} />
+                        <Difficulty />
                         <Button onClick={() => play()}>Novo Jogo</Button>
                     </>
                 }

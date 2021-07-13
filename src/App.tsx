@@ -1,8 +1,11 @@
 import { Game } from './pages/Game'
+import { GameContextProvider } from './contexts/GameContext'
 function App() {
   return (
     <div className="App">
-      <Game />
+      <GameContextProvider>
+        <Game />
+      </GameContextProvider>
     </div>
   );
 }

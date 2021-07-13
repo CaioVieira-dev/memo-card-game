@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import { useGame } from '../../hooks/useGame'
 
 
 const Select = styled.select`
@@ -36,14 +37,19 @@ cursor:pointer;
 
 `
 type DifficultyProps = {
-    changeGameDifficulty: (difficulty: string) => void;
+
 }
 
 export function Difficulty(props: DifficultyProps) {
+    const { changeGameDifficulty } = useGame()
+
+    function handleSelectDifficulty(difficulty: string) {
+        changeGameDifficulty(difficulty)
+    }
 
     return (
         <Select
-            onChange={(e) => props.changeGameDifficulty(e.target.value)}
+            onChange={(e) => handleSelectDifficulty(e.target.value)}
             name="difficulty">
             <Option value="easy">Fácil</Option>
             <Option value="normal">Normal</Option>
