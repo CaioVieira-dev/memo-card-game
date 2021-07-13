@@ -1,6 +1,7 @@
 import logo from '../../assets/logo.png';
 import { Button } from '../../components/Button'
 import { Difficulty } from '../../components/Difficulty'
+import { Board } from '../../components/Board'
 
 import styled from 'styled-components'
 import { useEffect, useState } from 'react';
@@ -26,7 +27,7 @@ gap:16px;
 `
 
 export function Game() {
-    const [gameState, setGameState] = useState('menuScreen');
+    const [gameState, setGameState] = useState('playings');
     const [gameDifficulty, setGameDifficulty] = useState('easy');
 
 
@@ -47,6 +48,9 @@ export function Game() {
                             changeGameDifficulty={changeGameDifficulty} />
                         <Button>Novo Jogo</Button>
                     </>
+                }
+                {gameState === 'playings' &&
+                    <Board />
                 }
             </Center>
 
