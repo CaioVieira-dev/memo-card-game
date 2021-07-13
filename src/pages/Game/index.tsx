@@ -27,13 +27,17 @@ gap:16px;
 `
 
 export function Game() {
-    const [gameState, setGameState] = useState('playings');
+    const [gameState, setGameState] = useState('menuScreen');
     const [gameDifficulty, setGameDifficulty] = useState('easy');
 
+    function play() {
+        setGameState('playing')
+    }
 
 
     useEffect(() => {
         console.log(gameDifficulty)
+
     }, [gameDifficulty])
     function changeGameDifficulty(difficulty: string) {
         setGameDifficulty(difficulty)
@@ -46,10 +50,10 @@ export function Game() {
                     <>
                         <Difficulty
                             changeGameDifficulty={changeGameDifficulty} />
-                        <Button>Novo Jogo</Button>
+                        <Button onClick={() => play()}>Novo Jogo</Button>
                     </>
                 }
-                {gameState === 'playings' &&
+                {gameState === 'playing' &&
                     <Board />
                 }
             </Center>

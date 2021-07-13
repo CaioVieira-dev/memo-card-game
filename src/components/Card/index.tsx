@@ -60,7 +60,7 @@ perspective: 600px;
 width:147px;
 height:145px;
 :hover&:not(.flipped)&{
-    animation: ${wobble} 0.8s ease-in-out alternate both 0.8s;
+    animation: ${wobble} 0.8s ease-in-out alternate both 1.2s;
 };
 `
 const CardObject = styled.div`

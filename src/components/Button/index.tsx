@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-import { ReactNode } from "react"
+import { ButtonHTMLAttributes } from "react"
 
-type ButtonProps = {
-    children: ReactNode;
-}
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+
+};
 
 const StyledButton = styled.button`
 padding: 16px 24px;
@@ -24,6 +24,6 @@ transition: background-color linear 0.2s;
 export function Button(props: ButtonProps) {
 
     return (
-        <StyledButton>{props.children}</StyledButton>
+        <StyledButton {...props}>{props.children}</StyledButton>
     )
 }
