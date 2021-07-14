@@ -16,7 +16,7 @@ border:0;
 cursor: pointer;
 transition: background-color linear 0.2s;
 :hover&{
-    background-color: hsl(184, 100%, 80%);
+    background-color: hsl(184, 100%, 60%);
 };
 `
 

@@ -2,7 +2,7 @@ import cardBack from '../../assets/cardBack.png'
 
 
 import styled, { keyframes } from 'styled-components'
-import { useState } from 'react'
+
 import { useGame } from '../../hooks/useGame'
 
 

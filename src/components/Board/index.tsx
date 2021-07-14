@@ -4,10 +4,10 @@ import { useGame } from '../../hooks/useGame'
 
 const GameBoard = styled.div`
 width:668px;
-height: 660px;
+
 background-color:hsl(184, 100%, 97%);
 position: absolute;
-top: 50%;
+top: 48%;
 left: 50%;
 transform: translate(-50%, -50%);
 border-radius:32px;

@@ -8,7 +8,7 @@ import { useGame } from '../../hooks/useGame'
 import { useEffect } from 'react';
 
 const GameBg = styled.div`
-    min-height: 100vh;
+    height: 100vh;
     background-color: hsl(184.7058823529412, 100%, 90%);
     width: 100%;
     display: flex;
@@ -21,21 +21,50 @@ width: 100%;
 height:100%;
 display: flex;
 align-items: center;
-justify-content: center;
+justify-content: stretch;
 flex-direction:column;
 gap:16px;
+position: relative;
+background-color: hsl(184.70588235294116, 100%, 80%);
+border-radius: 32px;
+padding:0 112px;
+-webkit-box-shadow: 2px 5px 16px 0px #0B325E, 1px 0px 26px -8px rgba(13,46,49,0.4); 
+box-shadow: 2px 5px 16px 0px #0B325E, 1px 0px 26px -8px rgba(13,46,49,0.4);
+
 
 `
-
+const Wrapper = styled.div`
+.playing&{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+`
+const Logo = styled.img`
+margin-top: 60px;
+    .playing&{
+        height:67px;
+        align-self: flex-start;
+        margin-top: 24px;
+    }
+`
+const Score = styled.p`
+font-size:24px;
+color:hsl(184.61538461538458, 100%, 97%);
+`
 export function Game() {
-    const { changeGameState, gameState, prepareGameBoard } = useGame()
+    const { changeGameState, gameState, prepareGameBoard, gameScore, resetScore } = useGame()
 
     function play() {
         prepareGameBoard();
         changeGameState('playing');
     }
     useEffect(() => {
-        const event = () => { changeGameState('menuScreen') }
+        const event = () => {
+            changeGameState('menuScreen');
+            resetScore()
+        }
         document.addEventListener('keydown', event)
         return () => document.removeEventListener('keydown', event)
     }, [])
@@ -43,7 +72,17 @@ export function Game() {
     return (
         <GameBg>
             <Center>
-                <img src={logo} alt="logo" />
+                <Wrapper className={gameState === 'playing' ? "playing" : ""}>
+                    <Logo
+                        src={logo}
+                        alt="logo"
+                        className={gameState === 'playing' ? "playing" : ""} />
+                    {gameState === 'playing' &&
+                        <>
+                            <Score>Pontuação: {gameScore}</Score>
+                        </>
+                    }
+                </Wrapper>
                 {gameState === 'menuScreen' &&
                     <>
                         <Difficulty />
