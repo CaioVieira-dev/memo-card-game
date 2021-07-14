@@ -24,6 +24,7 @@ type GameContextType = {
     changeGameDifficulty: (difficulty: string) => void;
     gameBoard: FruitType[] | undefined;
     flipCard: (id: string) => void;
+    prepareGameBoard: () => void;
 }
 type GameContextProviderProps = {
     children: ReactNode;
@@ -33,7 +34,7 @@ export const GameContext = createContext({} as GameContextType);
 
 export function GameContextProvider(props: GameContextProviderProps) {
     const [gameState, setGameState] = useState('menuScreen');
-    const [gameDifficulty, setGameDifficulty] = useState('hard');
+    const [gameDifficulty, setGameDifficulty] = useState('easy');
     const [gameBoard, setGameBoard] = useState<FruitType[]>();
     const [stepCounter, setStepCounter] = useState(0);
 
@@ -197,9 +198,6 @@ export function GameContextProvider(props: GameContextProviderProps) {
         return 'did not match'
     }
 
-    useEffect(() => {
-        prepareGameBoard()
-    }, [])
     return (
         <GameContext.Provider value={{
             changeGameState,
@@ -207,7 +205,8 @@ export function GameContextProvider(props: GameContextProviderProps) {
             gameState,
             gameDifficulty,
             gameBoard,
-            flipCard
+            flipCard,
+            prepareGameBoard
         }}>
             {props.children}
         </GameContext.Provider>

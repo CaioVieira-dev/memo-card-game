@@ -27,10 +27,11 @@ gap:16px;
 `
 
 export function Game() {
-    const { changeGameState, gameState } = useGame()
+    const { changeGameState, gameState, prepareGameBoard } = useGame()
 
     function play() {
-        changeGameState('playing')
+        prepareGameBoard();
+        changeGameState('playing');
     }
 
     return (
