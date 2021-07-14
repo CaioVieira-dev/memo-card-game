@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Card } from '../Card'
-
+import { useGame } from '../../hooks/useGame'
 
 const GameBoard = styled.div`
 width:668px;
@@ -21,24 +21,11 @@ flex-wrap: wrap;
 `
 
 export function Board() {
+    const { gameBoard } = useGame()
     return (
         <GameBoard className="board">
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
+            {gameBoard?.map((card) => <Card key={card.id} cardId={card.id} cardState={card.cardState} fruit={card.fruit} />)}
         </GameBoard>
+
     )
 }

@@ -1,9 +1,9 @@
 import cardBack from '../../assets/cardBack.png'
-import fruit from '../../assets/apple.png'
+
 
 import styled, { keyframes } from 'styled-components'
 import { useState } from 'react'
-
+import { useGame } from '../../hooks/useGame'
 
 
 
@@ -94,19 +94,30 @@ backface-visibility: hidden;
 );
 }
 `
-export function Card() {
-    const [isFlipped, setIsFlipped] = useState(false);
+type CardProps = {
+  fruit: string;
+  cardState: 'hidden' | 'visible' | 'done';
+  cardId: string;
+}
 
-    return (
-        <GameCard
-            className={isFlipped ? "flipped" : ""} >
-            <CardObject
-                className={isFlipped ? "flipped" : ""}
-                onClick={() => setIsFlipped(!isFlipped)}
-            >
-                <Image src={cardBack}></Image>
-                <Image src={fruit}></Image>
-            </CardObject>
-        </GameCard>
-    )
+export function Card(props: CardProps) {
+  const { flipCard } = useGame();
+
+  function handleFlip() {
+    console.log(props.cardId)
+    flipCard(props.cardId)
+  }
+
+  return (
+    <GameCard
+      className={props.cardState === 'visible' || props.cardState === 'done' ? "flipped" : ""} >
+      <CardObject
+        className={props.cardState === 'visible' || props.cardState === 'done' ? "flipped" : ""}
+        onClick={handleFlip}
+      >
+        <Image src={cardBack}></Image>
+        <Image src={props.fruit}></Image>
+      </CardObject>
+    </GameCard>
+  )
 }
