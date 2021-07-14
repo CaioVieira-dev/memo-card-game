@@ -13,15 +13,16 @@ export function useTimer(timeInSeconds: number) {
 
 
     useEffect(() => {
-        console.log('useeffect interval')
         let interval: any;
         if (stop) {
             clearInterval(interval);
             setStop(false);
             return;
         }
-        interval = setInterval(() => setTimer(timer - 1), 1000);
-
+        interval = setInterval(() => { if (timer > 0) setTimer(timer - 1) }, 1000);
+        if (timer === 0) {
+            clearInterval(interval);
+        }
         return () => clearInterval(interval);
     }, [timer])
 

@@ -136,8 +136,13 @@ export function GameContextProvider(props: GameContextProviderProps) {
             return;
         }
 
+        if (winCondition() === 'yes') {
+            alert('You Win!! :)')
+            return;
+        }
+
         setStepCounter(stepCounter + 1)
-        console.log('step counter ', stepCounter)
+
         if (stepCounter < 2) {
             let gameBoardCards = gameBoard;
             for (let i = 0; i < gameBoardCards.length; i++) {
@@ -202,6 +207,20 @@ export function GameContextProvider(props: GameContextProviderProps) {
             return gameBoardCards;
         }
         return 'did not match'
+    }
+    function winCondition() {
+        if (!gameBoard) {
+            console.error("Ooops, this wasn't meant to happen. Missing GameBoard.")
+            return 'no gameBoard cards';
+        }
+        let gameBoardCards = gameBoard;
+        for (let i = 0; i < gameBoardCards.length; i++) {
+            if (gameBoardCards[i].cardState !== 'done') {
+                return 'no'
+            }
+        }
+        return 'yes'
+
     }
     function resetScore() {
         setGameScore(0);

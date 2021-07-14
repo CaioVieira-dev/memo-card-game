@@ -82,7 +82,7 @@ export function Game() {
                         className={gameState === 'playing' ? "playing" : ""} />
                     {gameState === 'playing' &&
                         <>
-                            <Timer time={30} />
+                            <Timer time={5} />
                             <Score>Pontuação: {gameScore}</Score>
                         </>
                     }
