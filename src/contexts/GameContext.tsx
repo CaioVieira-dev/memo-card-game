@@ -35,7 +35,10 @@ export function GameContextProvider(props: GameContextProviderProps) {
     const [gameState, setGameState] = useState('menuScreen');
     const [gameDifficulty, setGameDifficulty] = useState('hard');
     const [gameBoard, setGameBoard] = useState<FruitType[]>();
+    const [stepCounter, setStepCounter] = useState(0);
+
     const [forceUpdate, setForceUpdate] = useState(false);
+
     useEffect(() => {
         if (forceUpdate) {
             setForceUpdate(false);
@@ -127,18 +130,73 @@ export function GameContextProvider(props: GameContextProviderProps) {
             console.error("Ooops, this wasn't meant to happen. Missing GameBoard.")
             return;
         }
-        let gameBoardCards = gameBoard;
-        for (let i = 0; i < gameBoardCards.length; i++) {
 
-            if (gameBoardCards[i].id === id) {
-                gameBoardCards[i].cardState = gameBoardCards[i].cardState === 'hidden' ? 'visible' : 'hidden';
+        setStepCounter(stepCounter + 1)
+        console.log('step counter ', stepCounter)
+        if (stepCounter < 2) {
+            let gameBoardCards = gameBoard;
+            for (let i = 0; i < gameBoardCards.length; i++) {
+                if (gameBoardCards[i].id === id) {
+                    if (gameBoardCards[i].cardState === 'hidden') {
+                        gameBoardCards[i].cardState = 'visible';
+                    } else if (gameBoardCards[i].cardState === 'visible') {
+                        gameBoardCards[i].cardState = 'hidden';
+                        setStepCounter(0);
+                    }
+                    setForceUpdate(true);
+                    setGameBoard(gameBoardCards);
+                    break;
+                }
+            }
+        } else {
+            setStepCounter(0)
+            const result = verifyCardMatch();
+            if (typeof result != 'string') {
+                setForceUpdate(true);
+                setGameBoard(result);
+            } else {
+
+                let gameBoardCards = gameBoard;
+                for (let i = 0; i < gameBoardCards.length; i++) {
+
+                    if (gameBoardCards[i].cardState === 'visible') {
+                        gameBoardCards[i].cardState = 'hidden';
+                    }
+
+                }
                 setForceUpdate(true);
                 setGameBoard(gameBoardCards);
-                break;
             }
         }
 
     }
+    function verifyCardMatch() {
+        if (!gameBoard) {
+            console.error("Ooops, this wasn't meant to happen. Missing GameBoard.")
+            return 'no gameBoard cards';
+        }
+        let flippedCards: any = [];
+        let gameBoardCards = gameBoard;
+        for (let i = 0; i < gameBoardCards.length; i++) {
+            if (gameBoardCards[i].cardState === 'visible') {
+                flippedCards.push(gameBoardCards[i])
+            }
+        }
+        if (flippedCards.length !== 2) {
+            console.error("Invalid number of cards flipped when this function was called.")
+            return 'invalid flipped cards number';
+        }
+        if (flippedCards[0].fruit === flippedCards[1].fruit) {
+            for (let i = 0; i < gameBoardCards.length; i++) {
+                if (gameBoardCards[i].id === flippedCards[0].id || gameBoardCards[i].id === flippedCards[1].id) {
+                    gameBoardCards[i].cardState = 'done';
+                }
+            }
+            return gameBoardCards;
+        }
+        return 'did not match'
+    }
+
     useEffect(() => {
         prepareGameBoard()
     }, [])
