@@ -5,6 +5,7 @@ import { Board } from '../../components/Board'
 
 import styled from 'styled-components'
 import { useGame } from '../../hooks/useGame'
+import { useEffect } from 'react';
 
 const GameBg = styled.div`
     min-height: 100vh;
@@ -33,6 +34,11 @@ export function Game() {
         prepareGameBoard();
         changeGameState('playing');
     }
+    useEffect(() => {
+        const event = () => { changeGameState('menuScreen') }
+        document.addEventListener('keydown', event)
+        return () => document.removeEventListener('keydown', event)
+    }, [])
 
     return (
         <GameBg>

@@ -41,19 +41,21 @@ type DifficultyProps = {
 }
 
 export function Difficulty(props: DifficultyProps) {
-    const { changeGameDifficulty } = useGame()
+  const { changeGameDifficulty, gameDifficulty } = useGame()
 
-    function handleSelectDifficulty(difficulty: string) {
-        changeGameDifficulty(difficulty)
-    }
+  function handleSelectDifficulty(difficulty: string) {
+    changeGameDifficulty(difficulty)
+  }
 
-    return (
-        <Select
-            onChange={(e) => handleSelectDifficulty(e.target.value)}
-            name="difficulty">
-            <Option value="easy">Fácil</Option>
-            <Option value="normal">Normal</Option>
-            <Option value="hard">Difícil</Option>
-        </Select>
-    )
+  return (
+    <Select
+      onChange={(e) => handleSelectDifficulty(e.target.value)}
+      name="difficulty"
+      value={gameDifficulty}
+    >
+      <Option value="easy">Fácil</Option>
+      <Option value="normal">Normal</Option>
+      <Option value="hard">Difícil</Option>
+    </Select>
+  )
 }

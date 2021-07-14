@@ -153,6 +153,7 @@ export function GameContextProvider(props: GameContextProviderProps) {
             setStepCounter(0)
             const result = verifyCardMatch();
             if (typeof result != 'string') {
+                //points ++
                 setForceUpdate(true);
                 setGameBoard(result);
             } else {
