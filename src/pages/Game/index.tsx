@@ -2,6 +2,7 @@ import logo from '../../assets/logo.png';
 import { Button } from '../../components/Button'
 import { Difficulty } from '../../components/Difficulty'
 import { Board } from '../../components/Board'
+import { Timer } from '../../components/Timer'
 
 import styled from 'styled-components'
 import { useGame } from '../../hooks/useGame'
@@ -61,11 +62,13 @@ export function Game() {
         changeGameState('playing');
     }
     useEffect(() => {
-        const event = () => {
-            changeGameState('menuScreen');
-            resetScore()
+        const event = (e: KeyboardEvent) => {
+            if (e.code === 'Escape') {
+                changeGameState('menuScreen');
+                resetScore();
+            }
         }
-        document.addEventListener('keydown', event)
+        document.addEventListener('keydown', (e) => event(e))
         return () => document.removeEventListener('keydown', event)
     }, [])
 
@@ -79,6 +82,7 @@ export function Game() {
                         className={gameState === 'playing' ? "playing" : ""} />
                     {gameState === 'playing' &&
                         <>
+                            <Timer time={30} />
                             <Score>Pontuação: {gameScore}</Score>
                         </>
                     }
