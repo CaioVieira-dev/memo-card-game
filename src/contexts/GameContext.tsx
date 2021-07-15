@@ -21,13 +21,13 @@ type FruitType = {
 type GameContextType = {
     gameState: string;
     gameDifficulty: string;
-    changeGameState: (state: "playing" | "menuScreen") => void;
+    changeGameState: (state: "playing" | "menuScreen" | "victory" | "gameOver") => void;
     changeGameDifficulty: (difficulty: string) => void;
     gameBoard: FruitType[] | undefined;
     flipCard: (card: FruitType) => void;
     prepareGameBoard: () => void;
     resetScore: () => void;
-    gameScore: Number;
+    gameScore: number;
     handleCardToFlip: (card: FruitType) => void;
     startGame: () => void;
     endGame: () => void;
@@ -62,7 +62,7 @@ export function GameContextProvider(props: GameContextProviderProps) {
         console.log('loop')
         // checar win condition
         if (winCondition() === 'yes') {
-            alert('You Win!! :)')
+            setGameState("victory");
             return setIsPlaying(false);
         }
         // precisa flipar?
@@ -114,7 +114,7 @@ export function GameContextProvider(props: GameContextProviderProps) {
         setIsPlaying(false);
     }
 
-    function changeGameState(state: "playing" | "menuScreen") {
+    function changeGameState(state: "playing" | "menuScreen" | "victory" | "gameOver") {
         setGameState(state);
     }
     function changeGameDifficulty(difficulty: string) {

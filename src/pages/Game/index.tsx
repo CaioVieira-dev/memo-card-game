@@ -3,6 +3,7 @@ import { Button } from '../../components/Button'
 import { Difficulty } from '../../components/Difficulty'
 import { Board } from '../../components/Board'
 import { Timer } from '../../components/Timer'
+import { Victory } from '../../components/Victory'
 
 import styled from 'styled-components'
 import { useGame } from '../../hooks/useGame'
@@ -48,6 +49,9 @@ margin-top: 60px;
         height:67px;
         align-self: flex-start;
         margin-top: 24px;
+    };
+    .victory&{
+        transform: scale(0.7);
     }
 `
 const Score = styled.p`
@@ -83,11 +87,12 @@ export function Game() {
     return (
         <GameBg>
             <Center>
-                <Wrapper className={gameState === 'playing' ? "playing" : ""}>
+                <Wrapper
+                    className={gameState === 'playing' ? "playing" : ""}>
                     <Logo
                         src={logo}
                         alt="logo"
-                        className={gameState === 'playing' ? "playing" : ""} />
+                        className={gameState === 'playing' ? "playing" : gameState === 'victory' ? "victory" : gameState === "gameOver" ? "gameOver" : ""} />
                     {gameState === 'playing' &&
                         <>
                             <Timer time={59} />
@@ -103,6 +108,10 @@ export function Game() {
                 }
                 {gameState === 'playing' &&
                     <Board />
+                }
+                {gameState === 'victory' &&
+                    <Victory score={gameScore} />
+
                 }
             </Center>
 
