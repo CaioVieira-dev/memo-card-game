@@ -101,11 +101,15 @@ type CardProps = {
 }
 
 export function Card(props: CardProps) {
-  const { flipCard } = useGame();
+  const { handleCardToFlip } = useGame();
 
   function handleFlip() {
-    console.log(props.cardId)
-    flipCard(props.cardId)
+    handleCardToFlip({
+      id: props.cardId,
+      fruit: props.fruit,
+      cardState: props.cardState
+    })
+
   }
 
   return (

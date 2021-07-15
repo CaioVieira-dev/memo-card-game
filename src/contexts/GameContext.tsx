@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, ReactNode } from 'react'
+import { useInterval } from '../hooks/useInterval'
 
 import apple from '../assets/apple.png';
 import avocado from '../assets/avocado.png';
@@ -23,10 +24,13 @@ type GameContextType = {
     changeGameState: (state: "playing" | "menuScreen") => void;
     changeGameDifficulty: (difficulty: string) => void;
     gameBoard: FruitType[] | undefined;
-    flipCard: (id: string) => void;
+    flipCard: (card: FruitType) => void;
     prepareGameBoard: () => void;
     resetScore: () => void;
     gameScore: Number;
+    handleCardToFlip: (card: FruitType) => void;
+    startGame: () => void;
+    endGame: () => void;
 }
 type GameContextProviderProps = {
     children: ReactNode;
@@ -39,17 +43,76 @@ export function GameContextProvider(props: GameContextProviderProps) {
     const [gameDifficulty, setGameDifficulty] = useState('easy');
     const [gameBoard, setGameBoard] = useState<FruitType[]>();
     const [stepCounter, setStepCounter] = useState(0);
+    const [cardToFlip, setCardToFlip] = useState<FruitType>();
+    const [isPlaying, setIsPlaying] = useState(false);
 
     const [gameScore, setGameScore] = useState(0);
 
     const [forceUpdate, setForceUpdate] = useState(false);
+    const [delay, setDelay] = useState(10);//controls gameloop speed
+
+
 
     useEffect(() => {
         if (forceUpdate) {
             setForceUpdate(false);
         }
     }, [forceUpdate])
+    function gameLoop() {
+        console.log('loop')
+        // checar win condition
+        if (winCondition() === 'yes') {
+            alert('You Win!! :)')
+            return setIsPlaying(false);
+        }
+        // precisa flipar?
+        // flipCard()
+        if (cardToFlip) {
+            //due to typescript, cardToFlip may be undefined
+            //to bypass this I've done this 'if' 
+            flipCard(cardToFlip);
+            setCardToFlip(undefined); //reset variable
+        }
+        if (stepCounter === 2) {
 
+            setDelay(800)
+            setStepCounter(stepCounter + 1)
+        }
+        //2 cards estão abertos?
+        if (stepCounter === 3) {
+            setDelay(10)
+
+            //cards são iguais?
+            // marcar como done
+            const result = verifyCardMatch();
+            if (result[0] === 'cards match') {
+                // @ts-ignore
+                setGameBoard(getCardStateChangedToDone(result[1], result[2]));
+                //points ++
+                setGameScore(gameScore + 20);
+                //update screen
+                setForceUpdate(true);
+            } else {
+                console.log(result[0]);
+                //precisa esconder os cards
+                // hideCards
+                hideCards();
+            }
+            setStepCounter(0);//reset step counter
+
+        }
+    }
+
+    useInterval(() => {
+        gameLoop();
+    }, isPlaying ? delay : null)
+
+    function startGame() {
+        setIsPlaying(true);
+    }
+    function endGame() {
+        setIsPlaying(false);
+    }
 
     function changeGameState(state: "playing" | "menuScreen") {
         setGameState(state);
@@ -130,62 +193,90 @@ export function GameContextProvider(props: GameContextProviderProps) {
 
         return array;
     }
-    function flipCard(id: string) {
+
+
+    function getCardStateChangedToVisible(id: string) {
+        if (!gameBoard) { return 'no gameBoard' }
+        let gameBoardCards = gameBoard;
+        for (let i = 0; i < gameBoardCards.length; i++) {
+            if (gameBoardCards[i].id === id) {
+                if (gameBoardCards[i].cardState === 'hidden') {
+                    gameBoardCards[i].cardState = 'visible';
+                }
+                return gameBoardCards
+            }
+        }
+    }
+    function getCardStateChangedToHidden(id: string) {
+        if (!gameBoard) { return 'no gameBoard' }
+        let gameBoardCards = gameBoard;
+        for (let i = 0; i < gameBoardCards.length; i++) {
+            if (gameBoardCards[i].id === id) {
+                if (gameBoardCards[i].cardState === 'visible') {
+                    gameBoardCards[i].cardState = 'hidden';
+                }
+                return gameBoardCards
+            }
+        }
+    }
+    function getCardStateChangedToDone(id1: string, id2: string) {
+        if (!gameBoard) { return 'no gameBoard' }
+        let gameBoardCards = gameBoard;
+        for (let i = 0; i < gameBoardCards.length; i++) {
+            if (gameBoardCards[i].id === id1 || gameBoardCards[i].id === id2) {
+                gameBoardCards[i].cardState = 'done';
+            }
+        }
+        return gameBoardCards
+    }
+    function hideCards() {
+        if (!gameBoard) { return; }
+        let gameBoardCards = gameBoard;
+        for (let i = 0; i < gameBoardCards.length; i++) {
+            if (gameBoardCards[i].cardState === 'visible') {
+                gameBoardCards[i].cardState = 'hidden';
+            }
+        }
+        setForceUpdate(true);
+        setGameBoard(gameBoardCards);
+        /*This function must set two or more cards to hidden,
+        so i can't use getCardStateChangedToHidden since it only changes
+        one card at time.
+        */
+    }
+
+    function flipCard(card: FruitType) {
         if (!gameBoard) {
             console.error("Ooops, this wasn't meant to happen. Missing GameBoard.")
-            return;
-        }
-
-        if (winCondition() === 'yes') {
-            alert('You Win!! :)')
             return;
         }
 
         setStepCounter(stepCounter + 1)
-
         if (stepCounter < 2) {
-            let gameBoardCards = gameBoard;
-            for (let i = 0; i < gameBoardCards.length; i++) {
-                if (gameBoardCards[i].id === id) {
-                    if (gameBoardCards[i].cardState === 'hidden') {
-                        gameBoardCards[i].cardState = 'visible';
-                    } else if (gameBoardCards[i].cardState === 'visible') {
-                        gameBoardCards[i].cardState = 'hidden';
-                        setStepCounter(0);
-                    }
-                    setForceUpdate(true);
-                    setGameBoard(gameBoardCards);
-                    break;
+
+            if (card.cardState === 'hidden') {
+                const newCardSet = getCardStateChangedToVisible(card.id);
+                if (newCardSet === 'no gameBoard') {
+                    return;
                 }
-            }
-        } else {
-            setStepCounter(0)
-            const result = verifyCardMatch();
-            if (typeof result != 'string') {
-                //points ++
-                setGameScore(gameScore + 20);
-                setForceUpdate(true);
-                setGameBoard(result);
-            } else {
-
-                let gameBoardCards = gameBoard;
-                for (let i = 0; i < gameBoardCards.length; i++) {
-
-                    if (gameBoardCards[i].cardState === 'visible') {
-                        gameBoardCards[i].cardState = 'hidden';
-                    }
-
+                setGameBoard(newCardSet)
+            } else if (card.cardState === 'visible') {
+                const newCardSet = getCardStateChangedToHidden(card.id);
+                if (newCardSet === 'no gameBoard') {
+                    return;
                 }
-                setForceUpdate(true);
-                setGameBoard(gameBoardCards);
+                setGameBoard(newCardSet)
+                setStepCounter(0); //reset stepCounter
             }
+            setForceUpdate(true)
         }
-
     }
     function verifyCardMatch() {
+        let result: string[];
         if (!gameBoard) {
             console.error("Ooops, this wasn't meant to happen. Missing GameBoard.")
-            return 'no gameBoard cards';
+            result = ['no gameBoard cards']
+            return result;
         }
         let flippedCards: any = [];
         let gameBoardCards = gameBoard;
@@ -195,18 +286,18 @@ export function GameContextProvider(props: GameContextProviderProps) {
             }
         }
         if (flippedCards.length !== 2) {
-            console.error("Invalid number of cards flipped when this function was called.")
-            return 'invalid flipped cards number';
+            console.error("Invalid number of cards flipped when this function was called.");
+            result = ['invalid flipped cards number']
+            return result;
         }
         if (flippedCards[0].fruit === flippedCards[1].fruit) {
-            for (let i = 0; i < gameBoardCards.length; i++) {
-                if (gameBoardCards[i].id === flippedCards[0].id || gameBoardCards[i].id === flippedCards[1].id) {
-                    gameBoardCards[i].cardState = 'done';
-                }
-            }
-            return gameBoardCards;
+            const id1 = flippedCards[0].id;
+            const id2 = flippedCards[1].id;
+            result = ['cards match', id1, id2]
+            return result;
         }
-        return 'did not match'
+        result = ['did not match']
+        return result
     }
     function winCondition() {
         if (!gameBoard) {
@@ -222,10 +313,13 @@ export function GameContextProvider(props: GameContextProviderProps) {
         return 'yes'
 
     }
+
     function resetScore() {
         setGameScore(0);
     }
-
+    function handleCardToFlip(card: FruitType) {
+        setCardToFlip(card)
+    }
     return (
         <GameContext.Provider value={{
             changeGameState,
@@ -236,7 +330,10 @@ export function GameContextProvider(props: GameContextProviderProps) {
             flipCard,
             prepareGameBoard,
             resetScore,
-            gameScore
+            gameScore,
+            handleCardToFlip,
+            startGame,
+            endGame,
         }}>
             {props.children}
         </GameContext.Provider>

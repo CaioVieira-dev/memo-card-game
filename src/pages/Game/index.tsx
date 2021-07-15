@@ -55,15 +55,23 @@ font-size:24px;
 color:hsl(184.61538461538458, 100%, 97%);
 `
 export function Game() {
-    const { changeGameState, gameState, prepareGameBoard, gameScore, resetScore } = useGame()
+    const { changeGameState,
+        gameState,
+        prepareGameBoard,
+        gameScore,
+        resetScore,
+        startGame,
+        endGame } = useGame()
 
     function play() {
         prepareGameBoard();
         changeGameState('playing');
+        startGame();
     }
     useEffect(() => {
         const event = (e: KeyboardEvent) => {
             if (e.code === 'Escape') {
+                endGame();
                 changeGameState('menuScreen');
                 resetScore();
             }
@@ -82,7 +90,7 @@ export function Game() {
                         className={gameState === 'playing' ? "playing" : ""} />
                     {gameState === 'playing' &&
                         <>
-                            <Timer time={5} />
+                            <Timer time={59} />
                             <Score>Pontuação: {gameScore}</Score>
                         </>
                     }
