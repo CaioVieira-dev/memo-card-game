@@ -1,8 +1,7 @@
 import styled from 'styled-components';
+import { useGame } from '../../hooks/useGame'
 
-type VictoryProps = {
-    score: number,
-}
+
 
 const Bg = styled.div`
 width: 100%;
@@ -20,13 +19,22 @@ color: hsl(184, 59%, 12%);
 font-size: 24px;
 margin-top:16px;
 `
+const Message = styled.p`
+color: hsl(184, 59%, 12%);
+margin-top:24px;
 
-export function Victory(props: VictoryProps) {
+`
+
+export function Victory() {
+    const { gameRemainingTime, gameScore } = useGame();
 
     return (
         <Bg>
             <Title>Você Venceu!</Title>
-            <Score>Seu placar foi: {props.score}</Score>
+            <Score>Pontuação por cartas viradas: {gameScore}</Score>
+            <Score>Pontuação extra por tempo: {gameRemainingTime * 10}</Score>
+            <Score>Sua pontuação final é: {gameScore + (gameRemainingTime * 10)}</Score>
+            <Message>Pressione "Esc" para voltar ao inicio.</Message>
         </Bg>
     )
 }

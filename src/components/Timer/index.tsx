@@ -1,7 +1,8 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useTimer } from '../../hooks/useTimer'
+import { useInterval } from '../../hooks/useInterval'
+import { useGame } from '../../hooks/useGame'
 
 const TimerDisplay = styled.p`
 font-size:24px;
@@ -13,7 +14,25 @@ type TimerProps = {
 
 
 export function Timer(props: TimerProps) {
-    const { timer, stopTimer } = useTimer(props.time);
+    const [timer, setTimer] = useState(props.time);
+    const [isRunning, setIsRunning] = useState(true);
+    const { setRemainingTime, gameOver } = useGame();
+
+
+    function stopTimer() {
+        setIsRunning(false);
+    }
+    useInterval(() => {
+        if (timer > 0) {
+            setTimer(timer - 1)
+            setRemainingTime(timer - 1);
+        } else {
+
+            setIsRunning(false)
+            //chamar perdeu jogo
+            gameOver();
+        }
+    }, isRunning ? 1000 : null)
 
     useEffect(() => {
         const event = (e: KeyboardEvent) => {
@@ -22,7 +41,10 @@ export function Timer(props: TimerProps) {
                 stopTimer();
         }
         document.addEventListener("keydown", (e) => event(e));
-        return () => document.removeEventListener("keydown", event);
+        return () => {
+            document.removeEventListener("keydown", event)
+
+        };
     }, [])
 
     return (

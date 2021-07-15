@@ -4,6 +4,7 @@ import { Difficulty } from '../../components/Difficulty'
 import { Board } from '../../components/Board'
 import { Timer } from '../../components/Timer'
 import { Victory } from '../../components/Victory'
+import { GameOver } from '../../components/GameOver'
 
 import styled from 'styled-components'
 import { useGame } from '../../hooks/useGame'
@@ -65,7 +66,8 @@ export function Game() {
         gameScore,
         resetScore,
         startGame,
-        endGame } = useGame()
+        endGame,
+        gameMaxTime } = useGame()
 
     function play() {
         prepareGameBoard();
@@ -95,7 +97,7 @@ export function Game() {
                         className={gameState === 'playing' ? "playing" : gameState === 'victory' ? "victory" : gameState === "gameOver" ? "gameOver" : ""} />
                     {gameState === 'playing' &&
                         <>
-                            <Timer time={59} />
+                            <Timer time={gameMaxTime} />
                             <Score>Pontuação: {gameScore}</Score>
                         </>
                     }
@@ -110,8 +112,10 @@ export function Game() {
                     <Board />
                 }
                 {gameState === 'victory' &&
-                    <Victory score={gameScore} />
-
+                    <Victory />
+                }
+                {gameState === 'gameOver' &&
+                    <GameOver />
                 }
             </Center>
 

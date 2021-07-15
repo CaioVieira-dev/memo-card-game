@@ -22,7 +22,7 @@ type GameContextType = {
     gameState: string;
     gameDifficulty: string;
     changeGameState: (state: "playing" | "menuScreen" | "victory" | "gameOver") => void;
-    changeGameDifficulty: (difficulty: string) => void;
+    changeGameDifficulty: (difficulty: "easy" | "normal" | "hard") => void;
     gameBoard: FruitType[] | undefined;
     flipCard: (card: FruitType) => void;
     prepareGameBoard: () => void;
@@ -31,6 +31,10 @@ type GameContextType = {
     handleCardToFlip: (card: FruitType) => void;
     startGame: () => void;
     endGame: () => void;
+    gameMaxTime: number;
+    setRemainingTime: (time: number) => void;
+    gameRemainingTime: number;
+    gameOver: () => void;
 }
 type GameContextProviderProps = {
     children: ReactNode;
@@ -50,7 +54,13 @@ export function GameContextProvider(props: GameContextProviderProps) {
 
     const [forceUpdate, setForceUpdate] = useState(false);
     const [delay, setDelay] = useState(10);//controls gameloop speed
+    const [gameMaxTime, setGameMaxTime] = useState(60);
+    const [gameRemainingTime, setGameRemainingTime] = useState(0)
 
+    function setRemainingTime(time: number) {
+        console.log(time)
+        setGameRemainingTime(time)
+    }
 
 
     useEffect(() => {
@@ -63,7 +73,7 @@ export function GameContextProvider(props: GameContextProviderProps) {
         // checar win condition
         if (winCondition() === 'yes') {
             setGameState("victory");
-            return setIsPlaying(false);
+            return endGame();
         }
         // precisa flipar?
         // flipCard()
@@ -113,11 +123,27 @@ export function GameContextProvider(props: GameContextProviderProps) {
     function endGame() {
         setIsPlaying(false);
     }
+    function gameOver() {
+        setGameState("gameOver");
+        setIsPlaying(false);
+
+    }
 
     function changeGameState(state: "playing" | "menuScreen" | "victory" | "gameOver") {
         setGameState(state);
     }
-    function changeGameDifficulty(difficulty: string) {
+    function changeGameDifficulty(difficulty: "easy" | "normal" | "hard") {
+        switch (difficulty) {
+            case "easy":
+                setGameMaxTime(60);
+                break;
+            case "normal":
+                setGameMaxTime(50);
+                break;
+            case "hard":
+                setGameMaxTime(40);
+                break;
+        }
         setGameDifficulty(difficulty);
     }
     function prepareGameBoard() {
@@ -334,6 +360,10 @@ export function GameContextProvider(props: GameContextProviderProps) {
             handleCardToFlip,
             startGame,
             endGame,
+            gameMaxTime,
+            setRemainingTime,
+            gameRemainingTime,
+            gameOver
         }}>
             {props.children}
         </GameContext.Provider>
