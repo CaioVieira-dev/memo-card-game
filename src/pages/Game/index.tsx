@@ -5,11 +5,17 @@ import { Board } from '../../components/Board'
 import { Timer } from '../../components/Timer'
 import { Victory } from '../../components/Victory'
 import { GameOver } from '../../components/GameOver'
+import { ThemeSwitcher } from '../../components/ThemeSwitcher'
 
 import { useGame } from '../../hooks/useGame'
 import { useEffect } from 'react';
 import { Center, GameBg, Logo, Score, Wrapper } from './styles'
-export function Game() {
+
+type GameProps = {
+    handleThemeSwitch: (themeTitle: string, hue?: number) => void;
+}
+
+export function Game(props: GameProps) {
     const { changeGameState,
         gameState,
         prepareGameBoard,
@@ -39,12 +45,15 @@ export function Game() {
     return (
         <GameBg>
             <Center>
+                <ThemeSwitcher handleThemeSwitch={props.handleThemeSwitch} />
                 <Wrapper
                     className={gameState === 'playing' ? "playing" : ""}>
                     <Logo
                         src={logo}
                         alt="logo"
-                        className={gameState === 'playing' ? "playing" : gameState === 'victory' ? "victory" : gameState === "gameOver" ? "gameOver" : ""} />
+                        className={gameState === 'playing' ? "playing" :
+                            gameState === 'victory' ? "victory" :
+                                gameState === "gameOver" ? "gameOver" : ""} />
                     {gameState === 'playing' &&
                         <>
                             <Timer time={gameMaxTime} />

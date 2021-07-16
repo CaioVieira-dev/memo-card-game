@@ -5,8 +5,8 @@ export const Select = styled.select`
 */
 -webkit-appearance: none;
   -moz-appearance: none;
-color: hsl(184, 59%, 12%);
-background-color: hsl(184, 100%, 97%);
+color: hsl(${props => props.theme.colors.hue}, 59%, 12%);
+background-color: hsl(${props => props.theme.colors.hue}, 100%, 97%);
 font-size: 24px;
 padding: 16px 24px;
 border-radius: 16px;
@@ -29,8 +29,8 @@ background-image:
   cursor:pointer;
 `
 export const Option = styled.option`
-color: hsl(184, 59%, 12%);
-background-color: hsl(184, 100%, 97%);
+color: hsl(${props => props.theme.colors.hue}, 59%, 12%);
+background-color: hsl(${props => props.theme.colors.hue}, 100%, 97%);
 cursor:pointer;
 
 `

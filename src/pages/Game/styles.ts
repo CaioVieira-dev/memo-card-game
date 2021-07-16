@@ -1,8 +1,8 @@
 import styled from 'styled-components'
-
+//184.7058823529412
 export const GameBg = styled.div`
     height: 100vh;
-    background-color: hsl(184.7058823529412, 100%, 90%);
+    background-color: hsl(${props => props.theme.colors.hue} , 100%, 90%);
     width: 100%;
     display: flex;
     align-items: center;
@@ -18,11 +18,11 @@ justify-content: stretch;
 flex-direction:column;
 gap:16px;
 position: relative;
-background-color: hsl(184.70588235294116, 100%, 80%);
+background-color: hsl(${props => props.theme.colors.hue}, 100%, 80%);
 border-radius: 32px;
 padding:0 112px;
--webkit-box-shadow: 2px 5px 16px 0px #0B325E, 1px 0px 26px -8px rgba(13,46,49,0.4); 
-box-shadow: 2px 5px 16px 0px #0B325E, 1px 0px 26px -8px rgba(13,46,49,0.4);
+-webkit-box-shadow: 2px 5px 16px 0px #222, 1px 0px 26px -8px hsla(${props => props.theme.colors.hue},58%,12%,40%); 
+box-shadow: 2px 5px 16px 0px #222, 1px 0px 26px -8px hsla(${props => props.theme.colors.hue},58%,12%,40%);
 
 
 `
@@ -39,7 +39,7 @@ margin-top: 60px;
     .playing&{
         height:67px;
         align-self: flex-start;
-        margin-top: 24px;
+        margin-top: 0px;
     };
     .victory&{
         transform: scale(0.7);
@@ -47,5 +47,5 @@ margin-top: 60px;
 `
 export const Score = styled.p`
 font-size:24px;
-color:hsl(184.61538461538458, 100%, 97%);
+color:hsl(${props => props.theme.colors.hue}, 100%, 97%);
 `
