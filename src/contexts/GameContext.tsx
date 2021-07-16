@@ -138,10 +138,10 @@ export function GameContextProvider(props: GameContextProviderProps) {
                 setGameMaxTime(60);
                 break;
             case "normal":
-                setGameMaxTime(50);
+                setGameMaxTime(40);
                 break;
             case "hard":
-                setGameMaxTime(40);
+                setGameMaxTime(35);
                 break;
         }
         setGameDifficulty(difficulty);

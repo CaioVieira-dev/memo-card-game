@@ -1,13 +1,8 @@
 
 import { useEffect, useState } from "react";
-import styled from "styled-components";
 import { useInterval } from '../../hooks/useInterval'
 import { useGame } from '../../hooks/useGame'
-
-const TimerDisplay = styled.p`
-font-size:24px;
-color:hsl(184.61538461538458, 100%, 97%);
-`
+import { TimerDisplay } from './styles'
 type TimerProps = {
     time: number;
 }
