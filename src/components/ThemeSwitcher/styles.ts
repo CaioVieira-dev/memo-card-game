@@ -93,6 +93,7 @@ gap: 12px;
 flex-wrap: wrap;
 position: absolute;
 border-radius: 16px;
+z-index:1000;
 
 
 .visible&{

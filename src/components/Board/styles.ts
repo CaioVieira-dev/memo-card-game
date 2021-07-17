@@ -5,7 +5,7 @@ width:668px;
 
 background-color:hsl(${props => props.theme.colors.hue}, 100%, 97%);
 position: absolute;
-top: 48%;
+top: 50%;
 left: 50%;
 transform: translate(-50%, -50%);
 border-radius:32px;

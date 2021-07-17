@@ -42,6 +42,23 @@ export function Game(props: GameProps) {
         return () => document.removeEventListener('keydown', event)
     }, [])
 
+    function GameScreen() {
+        switch (gameState) {
+            case 'menuScreen':
+                return <>
+                    <Difficulty />
+                    <Button onClick={() => play()}>Novo Jogo</Button>
+                </>
+            case 'playing':
+                return <Board />
+            case 'victory':
+                return <Victory />
+            case 'gameOver':
+                return <GameOver />
+        }
+
+    }
+
     return (
         <GameBg>
             <Center>
@@ -61,21 +78,7 @@ export function Game(props: GameProps) {
                         </>
                     }
                 </Wrapper>
-                {gameState === 'menuScreen' &&
-                    <>
-                        <Difficulty />
-                        <Button onClick={() => play()}>Novo Jogo</Button>
-                    </>
-                }
-                {gameState === 'playing' &&
-                    <Board />
-                }
-                {gameState === 'victory' &&
-                    <Victory />
-                }
-                {gameState === 'gameOver' &&
-                    <GameOver />
-                }
+                {GameScreen()}
             </Center>
 
         </GameBg>
