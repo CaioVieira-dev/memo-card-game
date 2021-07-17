@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { ColorCircle, Container, SwitchBox, ThemeBox, ThemeName, CustomColorInput, InputColorWrapper } from './styles'
 import { useDebounce } from '../../hooks/useDebounce'
@@ -60,15 +60,15 @@ export function ThemeSwitcher(props: ThemeSwitcherProps) {
         return h;
     }
 
-    function setCustomTheme(val: string) {
+    const setCustomTheme = useCallback((val: string) => {
         props.handleThemeSwitch("custom", getHueFromRGB(val))
+    }, [props])
 
-    }
     useEffect(() => {
-
         setCustomTheme(debouncedCustomHue);
 
-    }, [debouncedCustomHue])
+    }, [debouncedCustomHue, setCustomTheme])
+    console.log("custom hue", customHue)
     return (
         <Container>
             <ThemeBox>
