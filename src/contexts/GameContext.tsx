@@ -37,6 +37,8 @@ type GameContextType = {
     gameOver: () => void;
     changeGameMode: (mode: "normal" | "limited" | "challenge") => void;
     gameMode: "normal" | "limited" | "challenge";
+    limitedMoves: number;
+    resetMoves: () => void;
 }
 type GameContextProviderProps = {
     children: ReactNode;
@@ -124,6 +126,8 @@ export function GameContextProvider(props: GameContextProviderProps) {
         //checar lose condition
         if (limitedMoves <= 0) {
             setGameState('gameOver');
+            resetMoves();
+            resetScore();
             return endGame();
         }
         // precisa flipar?
@@ -173,7 +177,7 @@ export function GameContextProvider(props: GameContextProviderProps) {
                 limitedGameLoop();
                 break;
             case "challenge":
-                endGame()
+                limitedGameLoop()
                 break;
         }
     }, isPlaying ? delay : null)
@@ -410,6 +414,19 @@ export function GameContextProvider(props: GameContextProviderProps) {
     function resetScore() {
         setGameScore(0);
     }
+    function resetMoves() {
+        switch (gameDifficulty) {
+            case "easy":
+                setLimitedMoves(8);
+                break;
+            case "normal":
+                setLimitedMoves(9);
+                break;
+            case "hard":
+                setLimitedMoves(10);
+                break;
+        }
+    }
     function handleCardToFlip(card: FruitType) {
         setCardToFlip(card)
     }
@@ -432,7 +449,9 @@ export function GameContextProvider(props: GameContextProviderProps) {
             gameRemainingTime,
             gameOver,
             changeGameMode,
-            gameMode
+            gameMode,
+            limitedMoves,
+            resetMoves
         }}>
             {props.children}
         </GameContext.Provider>

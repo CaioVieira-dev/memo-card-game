@@ -14,7 +14,7 @@ export function Difficulty(props: DifficultyProps) {
 
   return (
     <>
-      <Label>Dificuldade</Label>
+      <Label>Dificuldade:</Label>
       <Select
         onChange={(e) => {
           if (e.target.value === "easy" ||

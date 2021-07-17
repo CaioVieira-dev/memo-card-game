@@ -7,6 +7,7 @@ import { Victory } from '../../components/Victory'
 import { GameOver } from '../../components/GameOver'
 import { ThemeSwitcher } from '../../components/ThemeSwitcher'
 import { ModeSelect } from '../../components/Mode'
+import { MoveCounter } from '../../components/MoveCounter'
 
 import { useGame } from '../../hooks/useGame'
 import { useEffect } from 'react';
@@ -24,7 +25,9 @@ export function Game(props: GameProps) {
         resetScore,
         startGame,
         endGame,
-        gameMaxTime } = useGame()
+        gameMaxTime,
+        gameMode,
+        resetMoves } = useGame()
 
     function play() {
         prepareGameBoard();
@@ -37,11 +40,12 @@ export function Game(props: GameProps) {
                 endGame();
                 changeGameState('menuScreen');
                 resetScore();
+                resetMoves();
             }
         }
         document.addEventListener('keydown', (e) => event(e))
         return () => document.removeEventListener('keydown', event)
-    }, [changeGameState, resetScore, endGame])
+    }, [changeGameState, resetScore, endGame, resetMoves])
 
     function GameScreen() {
         switch (gameState) {
@@ -60,6 +64,19 @@ export function Game(props: GameProps) {
         }
 
     }
+    function headerText() {
+        switch (gameMode) {
+            case 'normal':
+                return <Timer time={gameMaxTime} />
+            case 'limited':
+                return <MoveCounter />
+            case 'challenge':
+                return <div>
+                    <Timer time={gameMaxTime} />
+                    <MoveCounter />
+                </div>
+        }
+    }
 
     return (
         <GameBg>
@@ -75,7 +92,7 @@ export function Game(props: GameProps) {
                                 gameState === "gameOver" ? "gameOver" : ""} />
                     {gameState === 'playing' &&
                         <>
-                            <Timer time={gameMaxTime} />
+                            {headerText()}
                             <Score>Pontuação: {gameScore}</Score>
                         </>
                     }
