@@ -14,9 +14,9 @@ border:0;
 outline: 0;
 width:163px;
 background-image:
-    linear-gradient(45deg, transparent 50%, blue 50%),
-    linear-gradient(135deg, blue 50%, transparent 50%),
-    linear-gradient(to right, skyblue, skyblue);
+    linear-gradient(45deg, transparent 50%, hsl(${props => props.theme.colors.hue}, 59%, 12%) 50%),
+    linear-gradient(135deg, hsl(${props => props.theme.colors.hue}, 59%, 12%) 50%, transparent 50%),
+    linear-gradient(to right, hsl(${props => props.theme.colors.hue}, 100%, 60%), hsl(${props => props.theme.colors.hue}, 100%, 60%));
   background-position:
     calc(100% - 20px) calc(1em + 2px),
     calc(100% - 15px) calc(1em + 2px),
