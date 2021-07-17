@@ -35,6 +35,8 @@ type GameContextType = {
     setRemainingTime: (time: number) => void;
     gameRemainingTime: number;
     gameOver: () => void;
+    changeGameMode: (mode: "normal" | "limited" | "challenge") => void;
+    gameMode: "normal" | "limited" | "challenge";
 }
 type GameContextProviderProps = {
     children: ReactNode;
@@ -45,6 +47,7 @@ export const GameContext = createContext({} as GameContextType);
 export function GameContextProvider(props: GameContextProviderProps) {
     const [gameState, setGameState] = useState('menuScreen');
     const [gameDifficulty, setGameDifficulty] = useState('easy');
+    const [gameMode, setGameMode] = useState<"normal" | "limited" | "challenge">('normal');
     const [gameBoard, setGameBoard] = useState<FruitType[]>();
     const [stepCounter, setStepCounter] = useState(0);
     const [cardToFlip, setCardToFlip] = useState<FruitType>();
@@ -55,7 +58,8 @@ export function GameContextProvider(props: GameContextProviderProps) {
     const [forceUpdate, setForceUpdate] = useState(false);
     const [delay, setDelay] = useState(10);//controls gameloop speed
     const [gameMaxTime, setGameMaxTime] = useState(60);
-    const [gameRemainingTime, setGameRemainingTime] = useState(0)
+    const [gameRemainingTime, setGameRemainingTime] = useState(0);
+    const [limitedMoves, setLimitedMoves] = useState(8);
 
     function setRemainingTime(time: number) {
         console.log(time)
@@ -68,8 +72,7 @@ export function GameContextProvider(props: GameContextProviderProps) {
             setForceUpdate(false);
         }
     }, [forceUpdate])
-    function gameLoop() {
-        console.log('loop')
+    function normalGameLoop() {
         // checar win condition
         if (winCondition() === 'yes') {
             setGameState("victory");
@@ -112,9 +115,67 @@ export function GameContextProvider(props: GameContextProviderProps) {
 
         }
     }
+    function limitedGameLoop() {
+        // checar win condition
+        if (winCondition() === 'yes') {
+            setGameState("victory");
+            return endGame();
+        }
+        //checar lose condition
+        if (limitedMoves <= 0) {
+            setGameState('gameOver');
+            return endGame();
+        }
+        // precisa flipar?
+        // flipCard()
+        if (cardToFlip) {
+            //due to typescript, cardToFlip may be undefined
+            //to bypass this I've done this 'if' 
+            flipCard(cardToFlip);
+            setCardToFlip(undefined); //reset variable
+        }
+        if (stepCounter === 2) {
 
+            setDelay(800)
+            setStepCounter(stepCounter + 1)
+        }
+        //2 cards estão abertos?
+        if (stepCounter === 3) {
+            setDelay(10)
+            //reduzir numero de movimentos disponiveis
+            setLimitedMoves(limitedMoves - 1)
+            //cards são iguais?
+            // marcar como done
+            const result = verifyCardMatch();
+            if (result[0] === 'cards match') {
+                // @ts-ignore
+                setGameBoard(getCardStateChangedToDone(result[1], result[2]));
+                //points ++
+                setGameScore(gameScore + 20);
+                //update screen
+                setForceUpdate(true);
+            } else {
+                console.log(result[0]);
+                //precisa esconder os cards
+                // hideCards
+                hideCards();
+            }
+            setStepCounter(0);//reset step counter
+
+        }
+    }
     useInterval(() => {
-        gameLoop();
+        switch (gameMode) {
+            case "normal":
+                normalGameLoop();
+                break;
+            case 'limited':
+                limitedGameLoop();
+                break;
+            case "challenge":
+                endGame()
+                break;
+        }
     }, isPlaying ? delay : null)
 
     function startGame() {
@@ -136,15 +197,21 @@ export function GameContextProvider(props: GameContextProviderProps) {
         switch (difficulty) {
             case "easy":
                 setGameMaxTime(60);
+                setLimitedMoves(8);
                 break;
             case "normal":
                 setGameMaxTime(40);
+                setLimitedMoves(9);
                 break;
             case "hard":
                 setGameMaxTime(35);
+                setLimitedMoves(10);
                 break;
         }
         setGameDifficulty(difficulty);
+    }
+    function changeGameMode(mode: "normal" | "limited" | "challenge") {
+        setGameMode(mode)
     }
     function prepareGameBoard() {
         let fruits = [
@@ -363,7 +430,9 @@ export function GameContextProvider(props: GameContextProviderProps) {
             gameMaxTime,
             setRemainingTime,
             gameRemainingTime,
-            gameOver
+            gameOver,
+            changeGameMode,
+            gameMode
         }}>
             {props.children}
         </GameContext.Provider>
