@@ -6,6 +6,7 @@ import { Timer } from '../../components/Timer'
 import { Victory } from '../../components/Victory'
 import { GameOver } from '../../components/GameOver'
 import { ThemeSwitcher } from '../../components/ThemeSwitcher'
+import { ModeSelect } from '../../components/Mode'
 
 import { useGame } from '../../hooks/useGame'
 import { useEffect } from 'react';
@@ -46,6 +47,7 @@ export function Game(props: GameProps) {
         switch (gameState) {
             case 'menuScreen':
                 return <>
+                    <ModeSelect />
                     <Difficulty />
                     <Button onClick={() => play()}>Novo Jogo</Button>
                 </>
