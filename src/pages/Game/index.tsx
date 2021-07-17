@@ -40,7 +40,7 @@ export function Game(props: GameProps) {
         }
         document.addEventListener('keydown', (e) => event(e))
         return () => document.removeEventListener('keydown', event)
-    }, [])
+    }, [changeGameState, resetScore, endGame])
 
     function GameScreen() {
         switch (gameState) {
