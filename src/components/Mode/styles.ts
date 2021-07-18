@@ -27,6 +27,11 @@ background-image:
     40px 61px;
   background-repeat: no-repeat;
   cursor:pointer;
+  margin-top: 8px;
+  @media(max-width:768px){
+    padding: 12px 20px;
+    font-size: 20px;
+  }
 `
 export const Option = styled.option`
 color: hsl(${props => props.theme.colors.hue}, 59%, 12%);
@@ -40,4 +45,8 @@ font-size: 24px;
 font-weight: bold;
 width: 163px;
 
+margin-top: 16px;
+@media(max-width:768px){
+    font-size: 20px;
+  }
 `

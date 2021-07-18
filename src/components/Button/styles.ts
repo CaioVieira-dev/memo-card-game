@@ -12,4 +12,11 @@ transition: background-color linear 0.2s;
 :hover&{
     background-color: hsl(${props => props.theme.colors.hue}, 100%, 60%);
 };
+margin-top: 16px;
+@media(max-width:768px){
+    font-size: 20px;
+    padding: 12px 20px;
+width:163px;
+
+}
 `

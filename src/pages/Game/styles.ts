@@ -16,14 +16,17 @@ display: flex;
 align-items: center;
 justify-content: stretch;
 flex-direction:column;
-gap:16px;
+
 position: relative;
 background-color: hsl(${props => props.theme.colors.hue}, 100%, 80%);
 border-radius: 32px;
 padding:0 112px;
 -webkit-box-shadow: 2px 5px 16px 0px #222, 1px 0px 26px -8px hsla(${props => props.theme.colors.hue},58%,12%,40%); 
 box-shadow: 2px 5px 16px 0px #222, 1px 0px 26px -8px hsla(${props => props.theme.colors.hue},58%,12%,40%);
-
+@media(max-width:768px){
+    padding: 0 2%;
+    margin: 0 2%;
+}
 
 `
 export const Wrapper = styled.div`
@@ -32,6 +35,7 @@ export const Wrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    gap: 8px;
 }
 `
 export const Logo = styled.img`
@@ -40,12 +44,25 @@ margin-top: 60px;
         height:67px;
         align-self: flex-start;
         margin-top: 0px;
+        width:98px;
     };
     .victory&{
         transform: scale(0.7);
+    }
+
+    @media(max-width:768px){
+        width:300px;
+        margin-top: 0;
+        .gameOver&{
+        transform: scale(0.7);
+
+        }
     }
 `
 export const Score = styled.p`
 font-size:24px;
 color:hsl(${props => props.theme.colors.hue}, 100%, 97%);
+@media(max-width:768px){
+    font-size: 20px;
+  }
 `

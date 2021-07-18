@@ -57,6 +57,14 @@ height:145px;
 :hover&:not(.flipped)&{
     animation: ${wobble} 0.8s ease-in-out alternate both 1.2s;
 };
+@media(max-width:768px){
+width: 100px;
+height: 100px;
+}
+@media(max-width:450px){
+width: 74.5px;
+height: 74.5px;
+}
 `
 export const CardObject = styled.div`
 width:100%;

@@ -11,11 +11,18 @@ text-align: center;
 export const Title = styled.h1`
 color: hsl(${props => props.theme.colors.hue}, 59%, 12%);
 font-size:48px;
+
+@media(max-width:768px){
+       font-size: 36px;
+    }
 `
 export const Score = styled.p`
 color: hsl(${props => props.theme.colors.hue}, 59%, 12%);
 font-size: 24px;
 margin-top:16px;
+@media(max-width:768px){
+       font-size: 20px;
+    }
 `
 export const Message = styled.p`
 color: hsl(${props => props.theme.colors.hue}, 59%, 12%);

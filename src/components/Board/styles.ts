@@ -16,4 +16,16 @@ padding: 16px;
 display: flex;
 gap: 16px;
 flex-wrap: wrap;
+
+@media (max-width: 768px){
+    padding:16px 8px;
+    width:96%;
+    gap: 0;
+    justify-content:space-evenly;
+    row-gap: 8px;
+    top:60%;
+   max-width:500px;
+}
+
 `
+// max-width: 350px;
