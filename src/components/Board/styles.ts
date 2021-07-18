@@ -28,4 +28,3 @@ flex-wrap: wrap;
 }
 
 `
-// max-width: 350px;
