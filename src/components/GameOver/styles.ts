@@ -18,3 +18,11 @@ color: hsl(${props => props.theme.colors.hue}, 59%, 12%);
 margin-top:24px;
 
 `
+export const ExitButton = styled.span`
+color: hsl(${props => props.theme.colors.hue}, 59%, 12%);
+font-weight: bold;
+text-decoration: underline;
+cursor:pointer;
+
+`
+

@@ -1,9 +1,17 @@
 import { useGame } from '../../hooks/useGame'
 
-import { Bg, Message, Score, Title } from './styles'
+import { Bg, Message, Score, Title, ExitButton } from './styles'
 
 export function Victory() {
-    const { gameRemainingTime, gameScore, gameMode, limitedMoves } = useGame();
+    const { gameRemainingTime, gameScore, gameMode, limitedMoves,
+        endGame, changeGameState, resetScore, resetMoves } = useGame();
+
+    function handleExit() {
+        endGame();
+        changeGameState('menuScreen');
+        resetScore();
+        resetMoves();
+    }
 
     function showScore() {
         switch (gameMode) {
@@ -34,7 +42,7 @@ export function Victory() {
         <Bg>
             <Title>Você Venceu!</Title>
             {showScore()}
-            <Message>Pressione "Esc" para voltar ao inicio.</Message>
+            <Message>Clique <ExitButton onClick={handleExit}>aqui</ExitButton> ou pressione "Esc" para voltar ao inicio.</Message>
         </Bg>
     )
 }
