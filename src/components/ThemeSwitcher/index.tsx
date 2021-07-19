@@ -71,8 +71,8 @@ export function ThemeSwitcher(props: ThemeSwitcherProps) {
     console.log("custom hue", customHue)
     return (
         <Container>
-            <ThemeBox>
-                <ColorCircle onClick={() => setIsOpen(!isOpen)} />
+            <ThemeBox onClick={() => setIsOpen(!isOpen)}>
+                <ColorCircle />
                 <ThemeName>Temas</ThemeName>
             </ThemeBox>
             <SwitchBox className={isOpen ? "visible" : ""}>

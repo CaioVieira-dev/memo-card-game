@@ -16,6 +16,7 @@ display: flex;
 justify-content:space-between;
 align-items: center;
 border-radius: 200px;
+cursor: pointer;
 
 `
 export const ColorCircle = styled.div`
@@ -80,6 +81,14 @@ z-index: 0;
 
 export const ThemeName = styled.p`
 color: hsl(${props => props.theme.colors.hue}, 59%, 12%);
+/*remove user selection highlight*/
+-webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
 
 `
 export const SwitchBox = styled.div`
