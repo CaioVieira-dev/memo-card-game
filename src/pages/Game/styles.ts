@@ -61,7 +61,7 @@ margin-top: 60px;
 `
 export const Score = styled.p`
 font-size:24px;
-color:hsl(${props => props.theme.colors.hue}, 100%, 97%);
+color: hsl(${props => props.theme.colors.hue}, 59%, 12%);
 @media(max-width:768px){
     font-size: 20px;
   }
